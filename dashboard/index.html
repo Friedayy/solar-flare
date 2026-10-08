@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar Flare Forecasting — Space Weather ML Dashboard</title>
+  <meta name="description" content="Real-time Solar Flare Forecasting using Machine Learning (SDO SHARP magnetic parameters and GOES X-ray flares). Course 21CSC305P project.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Ambient Space Glow Elements -->
+  <div class="space-bg">
+    <div class="starfield"></div>
+    <div class="corona-radial-top"></div>
+    <div class="corona-radial-bottom"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="sun-icon-pulse">
+          <span class="sun-core"></span>
+          <span class="sun-flare-ring"></span>
+        </div>
+        <div>
+          <h1 class="brand-title">HelioForecast<span>.AI</span></h1>
+          <p class="brand-subtitle">Real-Time Solar Flare Forecasting • NASA SDO &amp; NOAA GOES</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#live-section" class="nav-link active">Live Telemetry</a>
+        <a href="#regions-section" class="nav-link">Active Sunspots</a>
+        <a href="#models-section" class="nav-link">Model Benchmarks</a>
+        <a href="#physics-section" class="nav-link">Magnetic Drivers</a>
+        <a href="#simulator-section" class="nav-link">Interactive Simulator</a>
+        <a href="#figures-section" class="nav-link">Publication Figures</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="refresh-btn" class="btn btn-primary" title="Refresh Live NOAA & NASA NRT Data">
+          <svg class="icon spin-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          <span>Sync NOAA Stream</span>
+        </button>
+        <a href="https://github.com/Friedayy/solar-flare" target="_blank" rel="noopener" class="btn btn-outline" title="GitHub Repository">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <!-- Hero Section -->
+    <section id="live-section" class="hero-card">
+      <div class="hero-media-wrapper">
+        <img src="assets/sun_hero.jpg" alt="Active Solar Corona with Magnetic Loops" class="hero-image">
+        <div class="hero-overlay"></div>
+      </div>
+
+      <div class="hero-body">
+        <div class="hero-tags">
+          <span class="badge badge-pulse"><span class="pulse-dot"></span> LIVE SPACE WEATHER MONITOR</span>
+          <span class="badge badge-meta">Course: 21CSC305P Machine Learning</span>
+          <span class="badge badge-meta">Guide: Dr. G. K. Vaidhya</span>
+        </div>
+
+        <div class="hero-grid">
+          <div class="hero-main-info">
+            <h2 class="hero-headline">Predicting Major M &amp; X Class Solar Flares Within 24 Hours</h2>
+            <p class="hero-summary">
+              Operational machine learning pipeline extracting 18 magnetic-field parameters (SHARP) measured by NASA's Solar Dynamics Observatory (SDO). Evaluated using True Skill Statistic (TSS) against strict time-based splits.
+            </p>
+
+            <div class="alert-box" id="threat-alert-box">
+              <div class="alert-icon-ring">
+                <span class="alert-symbol">⚠️</span>
+              </div>
+              <div>
+                <h4 class="alert-title" id="alert-title-text">High-Risk Active Sunspot Detected (NOAA AR 14549)</h4>
+                <p class="alert-desc" id="alert-desc-text">
+                  Model indicates a <strong>99.6% probability</strong> of an M- or X-class solar flare eruption within the next 24 hours driven by extreme polarity inversion line magnetic flux gradients.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-Time GOES Telemetry Widget -->
+          <div class="telemetry-widget">
+            <div class="widget-header">
+              <span class="widget-label">NOAA GOES PRIMARY X-RAY SENSOR</span>
+              <span class="live-tag"><span class="blink-dot"></span> REAL-TIME</span>
+            </div>
+            
+            <div class="xray-readout">
+              <div class="xray-class-badge" id="goes-class-badge">C1.4</div>
+              <div class="xray-meta">
+                <span class="xray-level-label">CURRENT FLUX LEVEL</span>
+                <span class="xray-category" id="goes-category">Active Solar Background</span>
+                <span class="xray-timestamp" id="goes-timestamp">Observed: 2026-10-08 18:53:00 UTC</span>
+              </div>
+            </div>
+
+            <!-- Logarithmic Flare Scale Meter -->
+            <div class="flare-scale-container">
+              <div class="scale-header">
+                <span>Solar Flare Magnitude Scale</span>
+                <span class="scale-value" id="scale-indicator-text">C-Class (Minor)</span>
+              </div>
+              <div class="flare-spectrum-bar">
+                <div class="scale-segment seg-a" title="A Class (Quiet background)">A</div>
+                <div class="scale-segment seg-b" title="B Class (Low activity)">B</div>
+                <div class="scale-segment seg-c active" title="C Class (Active flares)">C</div>
+                <div class="scale-segment seg-m" title="M Class (Major flares / Radio blackouts)">M</div>
+                <div class="scale-segment seg-x" title="X Class (Extreme flare storms)">X</div>
+              </div>
+              <div class="scale-ticks">
+                <span>10⁻⁸</span>
+                <span>10⁻⁷</span>
+                <span>10⁻⁶</span>
+                <span>10⁻⁵</span>
+                <span>10⁻⁴ W/m²</span>
+              </div>
+            </div>
+
+            <div class="quick-stats-row">
+              <div class="q-stat">
+                <span class="q-val" id="best-tss-stat">0.650</span>
+                <span class="q-lbl">Model TSS Skill</span>
+              </div>
+              <div class="q-stat">
+                <span class="q-val" id="best-recall-stat">80.4%</span>
+                <span class="q-lbl">Flare Recall</span>
+              </div>
+              <div class="q-stat">
+                <span class="q-val">25,338</span>
+                <span class="q-lbl">Total SDO Patches</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Active Sunspot Regions (24h Live Forecast) -->
+    <section id="regions-section" class="dashboard-section">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">NASA SDO NRT INFERENCE</span>
+          <h2 class="section-title">Current Active Sunspot Regions &amp; 24-Hour Forecast</h2>
+          <p class="section-desc">Machine learning probabilities for major (M/X) flare release across near-real-time active regions currently on the solar disk.</p>
+        </div>
+        <div class="status-meta-badge">
+          <span>Target Horizon: <strong>24 Hours</strong></span>
+          <span>•</span>
+          <span>Filter: <strong>Central Disk (|LON| ≤ 70°)</strong></span>
+        </div>
+      </div>
+
+      <div class="cards-grid" id="regions-container">
+        <!-- Rendered dynamically by app.js -->
+        <div class="region-card loading-card">
+          <div class="skeleton-ring"></div>
+          <p>Connecting to NASA SDO NRT stream...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Model Comparison & Metric Deep Dive -->
+    <section id="models-section" class="dashboard-section">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">BENCHMARKS &amp; EVALUATION</span>
+          <h2 class="section-title">Model Comparison &amp; The "Accuracy Lie"</h2>
+          <p class="section-desc">Why standard accuracy is useless for space weather events and how True Skill Statistic (TSS) reveals genuine predictive power.</p>
+        </div>
+      </div>
+
+      <!-- Explainer Banner -->
+      <div class="insight-banner">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <h4>Why Can't We Use Standard Accuracy?</h4>
+          <p>
+            Because major solar flares are extremely rare (~2.5% occurrence rate in our dataset). A lazy dummy model that predicts <em>"no flare"</em> every single day achieves <strong>97.4% accuracy</strong> while being completely useless in saving astronauts or power grids.
+            <strong>TSS (True Skill Statistic) = Recall − False Alarm Rate</strong>. It ranges from 0 (no skill / random guess) to 1.0 (perfect prediction) and is immune to class imbalance.
+          </p>
+        </div>
+      </div>
+
+      <!-- Metrics Table & Visual Comparison -->
+      <div class="models-grid">
+        <div class="glass-card table-card">
+          <h3 class="card-title">Model Performance Table (Holdout Test 2014–2015)</h3>
+          <div class="table-responsive">
+            <table class="metrics-table" id="models-table">
+              <thead>
+                <tr>
+                  <th>Model Architecture</th>
+                  <th>TSS (Main)</th>
+                  <th>HSS</th>
+                  <th>Recall</th>
+                  <th>Precision</th>
+                  <th>Accuracy</th>
+                </tr>
+              </thead>
+              <tbody id="models-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer-note">
+            * <strong>Bobra &amp; Couvidat (2015) Benchmark</strong>: TSS ≈ 0.76. Our result of <strong>0.650</strong> with Logistic Regression is realistic and robust under strict future-time chronological splitting without data leakage.
+          </div>
+        </div>
+
+        <!-- Confusion Matrix Visualizer -->
+        <div class="glass-card cm-card">
+          <h3 class="card-title">Best Model Confusion Matrix (Logistic Regression)</h3>
+          <p class="card-subtitle">Test Set Performance: 10,836 Sunspot Snapshots</p>
+          <div class="cm-matrix-grid">
+            <div class="cm-cell cm-tn">
+              <span class="cm-val">8,801</span>
+              <span class="cm-lbl">True Negatives (TN)</span>
+              <span class="cm-sub">Quiet periods correctly predicted</span>
+            </div>
+            <div class="cm-cell cm-fp">
+              <span class="cm-val">1,597</span>
+              <span class="cm-lbl">False Positives (FP)</span>
+              <span class="cm-sub">False alarms raised</span>
+            </div>
+            <div class="cm-cell cm-fn">
+              <span class="cm-val">86</span>
+              <span class="cm-lbl">False Negatives (FN)</span>
+              <span class="cm-sub">Flares missed</span>
+            </div>
+            <div class="cm-cell cm-tp">
+              <span class="cm-val">352</span>
+              <span class="cm-lbl">True Positives (TP)</span>
+              <span class="cm-sub">Major M/X flares caught (80.4%)</span>
+            </div>
+          </div>
+          <div class="cm-summary-bar">
+            <div class="stat-pill highlight"><strong>80.4%</strong> Recall (352/438 Flares Caught)</div>
+            <div class="stat-pill"><strong>84.6%</strong> Specificity</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Physics Feature Explorer -->
+    <section id="physics-section" class="dashboard-section">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">HELIOPHYSICS INTERPRETABILITY</span>
+          <h2 class="section-title">What Drives Solar Flares? (The Top Magnetic Features)</h2>
+          <p class="section-desc">NASA SDO extracts 18 physical magnetic properties (SHARP parameters). Here is how each influences flare triggering in plain English.</p>
+        </div>
+      </div>
+
+      <!-- Top 3 Feature Spotlight -->
+      <div class="top-features-cards">
+        <div class="feature-card top-feat rank-1">
+          <div class="feat-badge-rank">#1 DRIVER • WEIGHT: 2.881</div>
+          <h3 class="feat-code">R_VALUE</h3>
+          <h4 class="feat-name">Polarity Inversion Line Flux (R)</h4>
+          <div class="cheat-quote">
+            "How much strong opposite-polarity magnetic field sits right next to each other."
+          </div>
+          <p class="feat-body">
+            Measures magnetic flux concentrated near strong-field Polarity Inversion Lines (PILs). Sharp, steep borders between North and South magnetic poles produce high magnetic gradients that spark violent reconnection events.
+          </p>
+        </div>
+
+        <div class="feature-card top-feat rank-2">
+          <div class="feat-badge-rank">#2 DRIVER • WEIGHT: 2.126</div>
+          <h3 class="feat-code">TOTUSJH</h3>
+          <h4 class="feat-name">Total Unsigned Current Helicity</h4>
+          <div class="cheat-quote">
+            "How twisted the magnetic field is overall (current helicity)."
+          </div>
+          <p class="feat-body">
+            Direct proxy for the twist, writhe, and topological knotting of coronal flux ropes. When magnetic fields are twisted beyond critical thresholds, solar magnetic kink instabilities trigger catastrophic flare explosions.
+          </p>
+        </div>
+
+        <div class="feature-card top-feat rank-3">
+          <div class="feat-badge-rank">#3 DRIVER • WEIGHT: 1.047</div>
+          <h3 class="feat-code">TOTPOT</h3>
+          <h4 class="feat-name">Total Free Magnetic Energy</h4>
+          <div class="cheat-quote">
+            "Stored 'free' magnetic energy that can be released as a flare."
+          </div>
+          <p class="feat-body">
+            Quantifies the excess energy stored above the lowest-energy potential field state. This non-potential energy is the fuel reservoir that gets rapidly converted into kinetic energy and X-ray radiation.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature Interactive Bar Chart List -->
+      <div class="glass-card feature-list-card">
+        <div class="card-header-flex">
+          <h3 class="card-title">All 18 SDO Magnetic Parameters Ranked by Importance</h3>
+          <span class="card-subnote">Click any parameter for physical definition and units</span>
+        </div>
+        <div class="features-bars-container" id="features-container">
+          <!-- Rendered dynamically via app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive ML Flare Simulator -->
+    <section id="simulator-section" class="dashboard-section">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">LIVE ML EXPERIMENTATION</span>
+          <h2 class="section-title">Interactive Sunspot Flare Risk Simulator</h2>
+          <p class="section-desc">Adjust the key magnetic parameters below to simulate active region conditions and watch the trained ML model compute 24-hour flare probabilities live.</p>
+        </div>
+      </div>
+
+      <div class="simulator-wrapper glass-card">
+        <div class="sim-controls-pane">
+          <div class="sim-presets">
+            <span class="preset-label">Simulation Presets:</span>
+            <button class="btn btn-sm btn-preset active" data-preset="quiet">Quiet Sunspot (AR 14548)</button>
+            <button class="btn btn-sm btn-preset" data-preset="moderate">Moderate Shear Region</button>
+            <button class="btn btn-sm btn-preset" data-preset="explosive">Explosive Super-Region (AR 14549)</button>
+          </div>
+
+          <div class="sliders-grid">
+            <!-- Slider 1: R_VALUE -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label for="sl-r-val"><strong>R_VALUE</strong> (PIL Magnetic Gradient)</label>
+                <span class="slider-val-badge" id="val-r-val">3.16</span>
+              </div>
+              <input type="range" id="sl-r-val" min="0" max="5.3" step="0.05" value="3.16" class="solar-slider">
+              <span class="slider-hint">Opposite-polarity magnetic border intensity (log10 Mx)</span>
+            </div>
+
+            <!-- Slider 2: TOTUSJH -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label for="sl-totusjh"><strong>TOTUSJH</strong> (Current Helicity / Twist)</label>
+                <span class="slider-val-badge" id="val-totusjh">415.5</span>
+              </div>
+              <input type="range" id="sl-totusjh" min="0" max="5000" step="25" value="415.5" class="solar-slider">
+              <span class="slider-hint">Twist and writhe in coronal magnetic flux tubes (G² / m)</span>
+            </div>
+
+            <!-- Slider 3: TOTPOT -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label for="sl-totpot"><strong>TOTPOT</strong> (Free Energy Density Factor)</label>
+                <span class="slider-val-badge" id="val-totpot">5.08 × 10²²</span>
+              </div>
+              <input type="range" id="sl-totpot" min="0.1" max="15" step="0.1" value="5.1" class="solar-slider">
+              <span class="slider-hint">Stored combustible magnetic energy reservoir (× 10²² ergs/cm³)</span>
+            </div>
+
+            <!-- Slider 4: AREA_ACR -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label for="sl-area"><strong>AREA_ACR</strong> (Strong-field Area)</label>
+                <span class="slider-val-badge" id="val-area">282</span>
+              </div>
+              <input type="range" id="sl-area" min="5" max="3000" step="20" value="282" class="solar-slider">
+              <span class="slider-hint">Area of sunspot with B > 300 Gauss (micro-hemispheres)</span>
+            </div>
+
+            <!-- Slider 5: MEANSHR -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label for="sl-meanshr"><strong>MEANSHR</strong> (Mean Shear Angle)</label>
+                <span class="slider-val-badge" id="val-meanshr">28.3°</span>
+              </div>
+              <input type="range" id="sl-meanshr" min="10" max="60" step="0.5" value="28.3" class="solar-slider">
+              <span class="slider-hint">Stress deviation angle from potential ground-state</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulation Output Dial -->
+        <div class="sim-output-pane">
+          <div class="dial-container">
+            <svg class="risk-meter-svg" viewBox="0 0 200 200">
+              <circle class="meter-track" cx="100" cy="100" r="82"></circle>
+              <circle id="meter-fill-circle" class="meter-fill" cx="100" cy="100" r="82"></circle>
+            </svg>
+            <div class="dial-center-content">
+              <span class="dial-prob-val" id="sim-prob-display">17.3%</span>
+              <span class="dial-prob-label">P(M/X FLARE)</span>
+              <span class="dial-tier-badge" id="sim-tier-badge">Guarded Risk</span>
+            </div>
+          </div>
+
+          <div class="sim-prediction-details">
+            <h4 class="sim-status-title" id="sim-status-title">Moderate Magnetic Complexity</h4>
+            <p class="sim-status-desc" id="sim-status-desc">Active region exhibits typical baseline magnetic shear without critical PIL concentration.</p>
+            
+            <div class="sim-drivers-box">
+              <span class="sim-drivers-label">Primary Probability Drivers:</span>
+              <ul class="sim-drivers-list" id="sim-drivers-list">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Scientific Publications Figures Gallery -->
+    <section id="figures-section" class="dashboard-section">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">FIGURES &amp; VISUALIZATIONS</span>
+          <h2 class="section-title">Academic Publication Figures</h2>
+          <p class="section-desc">Figures created by <code>make_plots.py</code> for the research report, presentation slides, and viva examination.</p>
+        </div>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item" onclick="openLightbox('data/fig_model_comparison.png', 'Model Comparison: TSS vs. Accuracy')">
+          <div class="gallery-img-wrap">
+            <img src="/data/fig_model_comparison.png" alt="Model Comparison TSS vs Accuracy">
+            <div class="gallery-overlay"><span>🔍 View Full Resolution</span></div>
+          </div>
+          <div class="gallery-caption">
+            <h4>Fig 1: TSS vs. Accuracy Comparison</h4>
+            <p>Visual proof that accuracy masks lack of skill, while TSS exposes genuine forecasting ability.</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('data/fig_confusion_matrix.png', 'Confusion Matrix: Best Model (Logistic Regression)')">
+          <div class="gallery-img-wrap">
+            <img src="/data/fig_confusion_matrix.png" alt="Confusion Matrix Best Model">
+            <div class="gallery-overlay"><span>🔍 View Full Resolution</span></div>
+          </div>
+          <div class="gallery-caption">
+            <h4>Fig 2: Best Model Confusion Matrix</h4>
+            <p>Evaluated on the 2014–2015 holdout test set (352 true flares caught out of 438).</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('data/fig_feature_importance.png', 'Magnetic Feature Importance')">
+          <div class="gallery-img-wrap">
+            <img src="/data/fig_feature_importance.png" alt="Feature Importance Chart">
+            <div class="gallery-overlay"><span>🔍 View Full Resolution</span></div>
+          </div>
+          <div class="gallery-caption">
+            <h4>Fig 3: Magnetic Feature Importance</h4>
+            <p>R_VALUE, TOTUSJH, and TOTPOT identified as the dominant physical drivers.</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('data/fig_class_imbalance.png', 'Training Class Imbalance')">
+          <div class="gallery-img-wrap">
+            <img src="/data/fig_class_imbalance.png" alt="Class Imbalance Chart">
+            <div class="gallery-overlay"><span>🔍 View Full Resolution</span></div>
+          </div>
+          <div class="gallery-caption">
+            <h4>Fig 4: Extreme Class Imbalance</h4>
+            <p>Severe 1:37 ratio of quiet states to flare states across 14,502 training samples.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Viva & Presentation Quick Reference Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">DEFENSE &amp; VIVA CHEAT SHEET</span>
+          <h2 class="section-title">Frequently Asked Examination Questions</h2>
+        </div>
+      </div>
+
+      <div class="viva-grid">
+        <div class="glass-card viva-card">
+          <h4>Q1: Why not evaluate by accuracy?</h4>
+          <p>
+            Major solar flares are rare events (~1 flaring period per 40 quiet periods). A trivial model predicting "no flare" every time gets ~98% accuracy but has zero skill ($\text{TSS} = 0$). Accuracy is uninformative under heavy class imbalance.
+          </p>
+        </div>
+
+        <div class="glass-card viva-card">
+          <h4>Q2: What is TSS and why is it superior?</h4>
+          <p>
+            <strong>TSS (True Skill Statistic) = Recall − False Alarm Rate</strong>. It measures the net rate of correct detections minus false alarms. It is mathematically independent of the positive class base rate.
+          </p>
+        </div>
+
+        <div class="glass-card viva-card">
+          <h4>Q3: Why use a chronological time-based split?</h4>
+          <p>
+            Active regions persist for days to weeks. Random k-fold splits place snapshots of the <em>same sunspot</em> into both train and test partitions, resulting in severe temporal data leakage and artificially inflated scores.
+          </p>
+        </div>
+
+        <div class="glass-card viva-card">
+          <h4>Q4: Why is our TSS (0.650) lower than Bobra's 0.76?</h4>
+          <p>
+            Bobra &amp; Couvidat (2015) used 25 features and active-region grouped cross-validation during solar peak. We applied a strict future-time holdout (2014–2015.5) across different solar cycle phases, providing a more rigorous test of operational generalization.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="lightbox-modal" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <img id="lightbox-img" src="" alt="Full resolution view">
+      <h3 id="lightbox-caption" class="lightbox-title"></h3>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>
+        <p class="footer-brand">HelioForecast.AI • Solar Flare Forecasting ML System</p>
+        <p class="footer-meta">Course: 21CSC305P Machine Learning • Faculty Guide: Dr. G. K. Vaidhya, Assistant Professor, Dept. of CSE-AIML</p>
+      </div>
+      <div class="footer-team">
+        <span>Team:</span>
+        <strong>Mohammad Amaan Bhat (RA2411026020327)</strong> • 
+        <strong>Mirudhula Prabhakar (RA2411026020346)</strong> • 
+        <strong>Lorith Karthikeyan B (RA2411026020366)</strong>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
