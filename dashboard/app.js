@@ -6,10 +6,15 @@
 let currentFeatures = [];
 let simDebounceTimer = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    initDashboard();
+    setupEventListeners();
+  });
+} else {
   initDashboard();
   setupEventListeners();
-});
+}
 
 async function initDashboard() {
   await Promise.all([

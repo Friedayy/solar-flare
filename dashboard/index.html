@@ -167,10 +167,79 @@
       </div>
 
       <div class="cards-grid" id="regions-container">
-        <!-- Rendered dynamically by app.js -->
-        <div class="region-card loading-card">
-          <div class="skeleton-ring"></div>
-          <p>Connecting to NASA SDO NRT stream...</p>
+        <!-- Region 1: AR 14549 (Critical) -->
+        <div class="region-card critical">
+          <div class="region-card-top">
+            <span class="ar-num-title">NOAA AR 14549</span>
+            <span class="risk-pill critical">Critical Risk</span>
+          </div>
+          <div class="region-card-body">
+            <div class="gauge-wrapper">
+              <svg class="gauge-svg" viewBox="0 0 100 100">
+                <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
+                <circle class="gauge-progress" cx="50" cy="50" r="42" 
+                  style="stroke: #ff3366; stroke-dasharray: 263.89; stroke-dashoffset: 1.05;"></circle>
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-pct" style="color: #ff3366;">99.6%</span>
+                <span class="gauge-sub">24h PROB</span>
+              </div>
+            </div>
+            <div class="region-details">
+              <span class="region-time">Telemetry: 2026-10-08 17:00:00</span>
+              <p class="region-notes">Complex magnetic morphology, extreme polarity inversion gradient (R_VALUE = 4.95).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Region 2: AR 14548 (Quiet) -->
+        <div class="region-card quiet">
+          <div class="region-card-top">
+            <span class="ar-num-title">NOAA AR 14548</span>
+            <span class="risk-pill quiet">Quiet Risk</span>
+          </div>
+          <div class="region-card-body">
+            <div class="gauge-wrapper">
+              <svg class="gauge-svg" viewBox="0 0 100 100">
+                <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
+                <circle class="gauge-progress" cx="50" cy="50" r="42" 
+                  style="stroke: #00e676; stroke-dasharray: 263.89; stroke-dashoffset: 260.46;"></circle>
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-pct" style="color: #00e676;">1.3%</span>
+                <span class="gauge-sub">24h PROB</span>
+              </div>
+            </div>
+            <div class="region-details">
+              <span class="region-time">Telemetry: 2026-10-08 17:00:00</span>
+              <p class="region-notes">Simple dipolar active region, low magnetic shear.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Region 3: AR 14547 (Quiet) -->
+        <div class="region-card quiet">
+          <div class="region-card-top">
+            <span class="ar-num-title">NOAA AR 14547</span>
+            <span class="risk-pill quiet">Quiet Risk</span>
+          </div>
+          <div class="region-card-body">
+            <div class="gauge-wrapper">
+              <svg class="gauge-svg" viewBox="0 0 100 100">
+                <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
+                <circle class="gauge-progress" cx="50" cy="50" r="42" 
+                  style="stroke: #00e676; stroke-dasharray: 263.89; stroke-dashoffset: 260.99;"></circle>
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-pct" style="color: #00e676;">1.1%</span>
+                <span class="gauge-sub">24h PROB</span>
+              </div>
+            </div>
+            <div class="region-details">
+              <span class="region-time">Telemetry: 2026-10-07 14:00:00</span>
+              <p class="region-notes">Decaying sunspot region approaching western limb.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -214,7 +283,38 @@
                 </tr>
               </thead>
               <tbody id="models-tbody">
-                <!-- Injected via JavaScript -->
+                <tr class="winner-row">
+                  <td><strong>Logistic Regression (Balanced)</strong><span class="badge-winner">WINNER</span></td>
+                  <td><strong>0.650</strong></td>
+                  <td>0.245</td>
+                  <td>80.4%</td>
+                  <td>18.1%</td>
+                  <td>84.5%</td>
+                </tr>
+                <tr>
+                  <td><strong>Random Forest</strong></td>
+                  <td><strong>0.279</strong></td>
+                  <td>0.259</td>
+                  <td>31.5%</td>
+                  <td>27.0%</td>
+                  <td>93.8%</td>
+                </tr>
+                <tr>
+                  <td><strong>SVM (RBF) - Bobra baseline</strong></td>
+                  <td><strong>0.233</strong></td>
+                  <td>0.172</td>
+                  <td>29.5%</td>
+                  <td>16.9%</td>
+                  <td>91.3%</td>
+                </tr>
+                <tr>
+                  <td><strong>XGBoost</strong></td>
+                  <td><strong>0.227</strong></td>
+                  <td>0.229</td>
+                  <td>25.8%</td>
+                  <td>26.2%</td>
+                  <td>94.1%</td>
+                </tr>
               </tbody>
             </table>
           </div>

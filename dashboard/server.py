@@ -8,7 +8,9 @@ import os
 import sys
 import json
 import mimetypes
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import threading
+import time
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 from datetime import datetime, timezone, timedelta
 import joblib
@@ -309,24 +311,6 @@ class DashboardHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def handle_api_overview(self):
-        # Update current GOES reading dynamically if possible
-        try:
-            t, cls = goes_now()
-            cat = "Quiet"
-            if cls.startswith("C"):
-                cat = "C-Class (Active Solar Flux)"
-            elif cls.startswith("M"):
-                cat = "M-Class (Major Solar Storm Warning)"
-            elif cls.startswith("X"):
-                cat = "X-Class (Extreme Space Weather Event)"
-            LIVE_CACHE["goes_xray"] = {
-                "time_tag": t,
-                "flux_class": cls,
-                "category": cat
-            }
-        except Exception:
-            pass
-
         data = {
             "title": "Solar Flare Forecasting Operational ML System",
             "benchmark": "Bobra & Couvidat (2015) — TSS ≈ 0.76",
@@ -498,9 +482,34 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_json({"status": "partial", "error": str(e), "data": LIVE_CACHE})
 
 
+def telemetry_worker():
+    """Background worker updating NOAA readings periodically."""
+    while True:
+        try:
+            t, cls = goes_now()
+            cat = "Quiet"
+            if cls.startswith("C"):
+                cat = "C-Class (Active Solar Flux)"
+            elif cls.startswith("M"):
+                cat = "M-Class (Major Solar Storm Warning)"
+            elif cls.startswith("X"):
+                cat = "X-Class (Extreme Space Weather Event)"
+            LIVE_CACHE["goes_xray"] = {
+                "time_tag": t,
+                "flux_class": cls,
+                "category": cat
+            }
+        except Exception:
+            pass
+        time.sleep(120)  # Check every 2 minutes
+
+
 def run_server(port=8080):
+    t_thread = threading.Thread(target=telemetry_worker, daemon=True)
+    t_thread.start()
+
     server_address = ("0.0.0.0", port)
-    httpd = HTTPServer(server_address, DashboardHandler)
+    httpd = ThreadingHTTPServer(server_address, DashboardHandler)
     print(f"Solar Flare Forecasting Dashboard running at http://localhost:{port}/")
     try:
         httpd.serve_forever()
