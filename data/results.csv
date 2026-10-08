@@ -1,0 +1,5 @@
+Model,TSS,HSS,Recall,Precision,Accuracy
+Logistic Regression,0.65,0.245,0.804,0.181,0.845
+SVM (RBF) - Bobra baseline,0.233,0.172,0.295,0.169,0.913
+Random Forest,0.279,0.259,0.315,0.27,0.938
+XGBoost,0.227,0.229,0.258,0.262,0.941

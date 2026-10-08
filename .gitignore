@@ -1,0 +1,34 @@
+# Virtual Environment (Crucial: never commit this!)
+venv/
+.venv/
+env/
+ENV/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Caches and logs
+.pytest_cache/
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE and Editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Note: The cached dataset files (data/train.csv: ~3.1MB, data/test.csv: ~2.4MB)
+# and model (data/best_model.pkl: ~2.4KB) are under GitHub's 50MB file size limit.
+# Keeping them tracked allows your teammates and guide to run `live` and `make_plots.py`
+# instantly without waiting 30-60 minutes to re-download from NASA JSOC.
+# If you prefer to exclude large raw CSVs instead, uncomment the line below:
+# data/train.csv
+# data/test.csv
