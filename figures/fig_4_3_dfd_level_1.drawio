@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-10-12T15:40:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="fig_4_3_dfd_level_1" name="fig_4_3_dfd_level_1">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- External Entities -->
+        <mxCell id="e_jsoc" value="&lt;b&gt;NASA SDO / Stanford JSOC&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e_noaa" value="&lt;b&gt;NOAA GOES / HEK &amp;amp; SWPC&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e_user" value="&lt;b&gt;Space Weather Forecaster&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="160" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dash" value="&lt;b&gt;Render Live Dashboard&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="480" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Processes -->
+        <mxCell id="p1" value="&lt;b&gt;1.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;Data Ingestion &amp;amp;&lt;br&gt;Central Disk Filter&lt;/b&gt;&lt;br&gt;(|LON_FWT| ≤ 70°)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="320" y="120" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p2" value="&lt;b&gt;2.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;Feature Extraction &amp;amp;&lt;br&gt;24h Flare Labelling&lt;/b&gt;&lt;br&gt;(18 SHARP Params)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="600" y="120" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p3" value="&lt;b&gt;3.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;Model Training &amp;amp;&lt;br&gt;TSS Benchmark&lt;/b&gt;&lt;br&gt;(LR, SVM, RF, XGB)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="600" y="360" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p4" value="&lt;b&gt;4.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;Live Operational&lt;br&gt;Forecaster &amp;amp; Serving&lt;/b&gt;&lt;br&gt;(NRT Stream + SWPC)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="600" y="580" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Data Stores -->
+        <mxCell id="d1" value="&lt;b&gt;D1&lt;/b&gt; | Raw SHARP Telemetry" style="shape=partialRectangle;top=0;bottom=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="290" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" value="&lt;b&gt;D2&lt;/b&gt; | GOES Flare Registry" style="shape=partialRectangle;top=0;bottom=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="350" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" value="&lt;b&gt;D3&lt;/b&gt; | train.csv &amp;amp; test.csv" style="shape=partialRectangle;top=0;bottom=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="840" y="270" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="d4" value="&lt;b&gt;D4&lt;/b&gt; | best_model.pkl &amp;amp; results.csv" style="shape=partialRectangle;top=0;bottom=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="840" y="410" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Flows -->
+        <mxCell id="fl1" value="hmi.sharp_cea_720s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="e_jsoc" target="p1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl2" value="HEK Flare Events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="e_noaa" target="p1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl3" value="Clean SHARP Patches" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="p1" target="d1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl4" value="Parsed Flares" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="p1" target="d2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl5" value="Magnetic features + Flares" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="d1" target="p2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl6" value="Time-split partitions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="p2" target="d3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl7" value="Training sets" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="d3" target="p3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl8" value="Trained weights" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="p3" target="d4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl9" value="Load Model Pipeline" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="d4" target="p4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl10" value="NRT Telemetry Stream" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;exitX=0.2;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="e_jsoc" target="p4"><mxGeometry relative="1" as="geometry"><Array points="40,630"/></Array></mxGeometry></mxCell>
+        <mxCell id="fl11" value="Live Primary X-Ray" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#333;fontSize=10;exitX=0.2;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="e_noaa" target="p4"><mxGeometry relative="1" as="geometry"><Array points="100,660"/></Array></mxGeometry></mxCell>
+        <mxCell id="fl12" value="TSS / Metrics / Top Features" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#27ae60;fontSize=10;" edge="1" parent="1" source="p3" target="e_user"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl13" value="Live AR Probabilities &amp; Alerts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#27ae60;fontSize=10;" edge="1" parent="1" source="p4" target="e_user"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="fl14" value="Real-time Web Feed &amp; Metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#2980b9;fontSize=10;" edge="1" parent="1" source="p4" target="e_dash"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

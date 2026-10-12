@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-10-12T15:40:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="fig_4_2_dfd_level_0" name="fig_4_2_dfd_level_0">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- External Entity: NASA SDO / Stanford JSOC -->
+        <mxCell id="ent_jsoc" value="&lt;b&gt;NASA SDO / Stanford JSOC&lt;/b&gt;&lt;br&gt;(Solar Dynamics Observatory Telemetry)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- External Entity: NOAA GOES / HEK & SWPC -->
+        <mxCell id="ent_noaa" value="&lt;b&gt;NOAA GOES / HEK &amp;amp; SWPC&lt;/b&gt;&lt;br&gt;(Flare Catalog &amp;amp; Live X-Ray Flux)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="60" y="440" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Process 0.0: Solar Flare Forecasting System -->
+        <mxCell id="proc_main" value="&lt;b&gt;0.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;Solar Flare Operational&lt;br&gt;Forecasting System&lt;/b&gt;&lt;br&gt;(Multi-Source ML Pipeline)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontSize=14;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="470" y="270" width="260" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- External Entity: Space Weather Forecaster -->
+        <mxCell id="ent_user" value="&lt;b&gt;Space Weather Forecaster / Researcher&lt;/b&gt;&lt;br&gt;(Operational Analyst)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="910" y="160" width="260" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- External Entity: Web Dashboard Client -->
+        <mxCell id="ent_client" value="&lt;b&gt;Public Web Dashboard Client&lt;/b&gt;&lt;br&gt;(Render Cloud / HelioForecast.AI)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="910" y="440" width="260" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Data Flow: JSOC to Process -->
+        <mxCell id="flow_1" value="SDO HMI SHARP Patches&lt;br&gt;(18 Magnetic Features, |LON_FWT| ≤ 70°)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#333333;fontSize=11;" edge="1" parent="1" source="ent_jsoc" target="proc_main">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Data Flow: NOAA to Process -->
+        <mxCell id="flow_2" value="GOES Flare Catalog &amp;amp;&lt;br&gt;Real-Time 1-8Å X-Ray Flux" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.7;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#333333;fontSize=11;" edge="1" parent="1" source="ent_noaa" target="proc_main">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Data Flow: User Query to Process -->
+        <mxCell id="flow_3" value="Model Training / Evaluation Query&lt;br&gt;&amp;amp; Live Forecast Request" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=0;exitY=0.7;exitDx=0;exitDy=0;strokeWidth=2;strokeColor=#333333;fontSize=11;" edge="1" parent="1" source="ent_user" target="proc_main">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Data Flow: Process to User -->
+        <mxCell id="flow_4" value="24h M/X Flare Probabilities,&lt;br&gt;TSS Benchmarks &amp;amp; AR Alerts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.2;entryY=1;entryDx=0;entryDy=0;exitX=0.9;exitY=0.15;exitDx=0;exitDy=0;strokeWidth=2;strokeColor=#27ae60;fontSize=11;" edge="1" parent="1" source="proc_main" target="ent_user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Data Flow: Process to Client -->
+        <mxCell id="flow_5" value="Real-Time Risk Cards, Sunspot Gauges,&lt;br&gt;GOES Flux Badges &amp;amp; Simulator API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;entryDy=0;strokeWidth=2;strokeColor=#2980b9;fontSize=11;" edge="1" parent="1" source="proc_main" target="ent_client">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

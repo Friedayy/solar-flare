@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-10-12T15:40:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="fig_4_4_use_case" name="fig_4_4_use_case">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- System Boundary -->
+        <mxCell id="sys_box" value="Solar Flare Operational Forecasting Platform" style="shape=rectangle;fillColor=none;strokeColor=#666666;strokeWidth=2;dashed=1;verticalAlign=top;fontStyle=1;fontSize=15;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="50" width="680" height="730" as="geometry" />
+        </mxCell>
+
+        <!-- Actors -->
+        <mxCell id="act_forecaster" value="Space Weather&lt;br&gt;Forecaster" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="50" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="act_mle" value="ML Engineer /&lt;br&gt;Data Scientist" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="540" width="50" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="act_jsoc" value="NASA SDO /&lt;br&gt;JSOC System" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="160" width="50" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="act_noaa" value="NOAA SWPC /&lt;br&gt;HEK System" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="420" width="50" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="act_render" value="Render Cloud&lt;br&gt;Platform" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="620" width="50" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases -->
+        <mxCell id="uc_live" value="Run Live Operational&lt;br&gt;Forecast (24h Window)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="110" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_mon" value="Monitor Real-Time Active&lt;br&gt;Regions &amp;amp; X-Ray Flux" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_sim" value="Simulate Flare Risk via&lt;br&gt;Magnetic Field Sliders" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="310" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_train" value="Train &amp;amp; Benchmark Models&lt;br&gt;(TSS, HSS, Recall)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="440" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_data" value="Ingest &amp;amp; Clean SHARP&lt;br&gt;&amp;amp; HEK Flare Datasets" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="560" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_deploy" value="Deploy Live Model&lt;br&gt;&amp;amp; REST API Service" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="670" width="190" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Included Use Cases -->
+        <mxCell id="uc_inc1" value="Stream NRT Data&lt;br&gt;from JSOC DRMS" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="110" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_inc2" value="Filter Central Disk&lt;br&gt;(|LON_FWT| ≤ 70°)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="210" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_inc3" value="Handle Class Imbalance&lt;br&gt;(1:37 Severe Skew)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="440" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_inc4" value="Evaluate TSS Score&lt;br&gt;&amp;amp; Feature Weights" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="540" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Associations -->
+        <mxCell id="a1" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="act_forecaster" target="uc_live"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a2" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="act_forecaster" target="uc_mon"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a3" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="act_forecaster" target="uc_sim"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a4" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="act_mle" target="uc_train"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a5" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="act_mle" target="uc_data"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a6" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="act_mle" target="uc_deploy"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a7" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="uc_inc1" target="act_jsoc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a8" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="uc_data" target="act_noaa"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a9" style="strokeWidth=1.5;strokeColor=#333;endArrow=none;" edge="1" parent="1" source="uc_deploy" target="act_render"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Includes -->
+        <mxCell id="inc1" value="&amp;laquo;include&amp;raquo;" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeWidth=1.5;strokeColor=#b85450;fontSize=10;" edge="1" parent="1" source="uc_live" target="uc_inc1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="inc2" value="&amp;laquo;include&amp;raquo;" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeWidth=1.5;strokeColor=#b85450;fontSize=10;" edge="1" parent="1" source="uc_live" target="uc_inc2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="inc3" value="&amp;laquo;include&amp;raquo;" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeWidth=1.5;strokeColor=#b85450;fontSize=10;" edge="1" parent="1" source="uc_train" target="uc_inc3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="inc4" value="&amp;laquo;include&amp;raquo;" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeWidth=1.5;strokeColor=#b85450;fontSize=10;" edge="1" parent="1" source="uc_train" target="uc_inc4"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
